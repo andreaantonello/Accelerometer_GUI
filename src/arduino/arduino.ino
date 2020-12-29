@@ -5,6 +5,7 @@ Brian R Taylor
 brian.taylor@bolderflight.com
 
 Copyright (c) 2017 Bolder Flight Systems
+Copyright (c) 2020 Andrea Antonello
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software 
 and associated documentation files (the "Software"), to deal in the Software without restriction, 
@@ -40,10 +41,10 @@ int status;
 
 void setup() {
   // serial to display data
-  Serial.begin(115200);
+  Serial.begin(19200);
   while(!Serial) {}
 
-  // start communication with IMU 
+  // start communication with IMU
   status = IMU.begin();
   if (status < 0) {
     Serial.println("IMU initialization unsuccessful");
@@ -52,41 +53,27 @@ void setup() {
     Serial.println(status);
     while(1) {}
   }
+  // setting the accelerometer full scale range to +/-8G
+  IMU.setAccelRange(MPU9250::ACCEL_RANGE_2G);
+  // setting the gyroscope full scale range to +/-500 deg/s
+  IMU.setGyroRange(MPU9250::GYRO_RANGE_250DPS);
+  // setting DLPF bandwidth to 20 Hz
+  IMU.setDlpfBandwidth(MPU9250::DLPF_BANDWIDTH_184HZ);
 }
 
 void loop() {
   // read the sensor
   IMU.readSensor();
-  // display the data
-  Serial.print("AccelX: ");
-  Serial.print(IMU.getAccelX_mss(),6);
-  Serial.print("  ");
-  Serial.print("AccelY: ");  
-  Serial.print(IMU.getAccelY_mss(),6);
-  Serial.print("  ");
-  Serial.print("AccelZ: ");  
-  Serial.print(IMU.getAccelZ_mss(),6);
-  
-  Serial.print("GyroX: ");
-  Serial.print(IMU.getGyroX_rads(),6);
-  Serial.print("  ");
-  Serial.print("GyroY: ");  
-  Serial.print(IMU.getGyroY_rads(),6);
-  Serial.print("  ");
-  Serial.print("GyroZ: ");  
-  Serial.print(IMU.getGyroZ_rads(),6);
-
-  Serial.print("MagX: ");  
-  Serial.print(IMU.getMagX_uT(),6);
-  Serial.print("  ");  
-  Serial.print("MagY: ");
-  Serial.print(IMU.getMagY_uT(),6);
-  Serial.print("  ");
-  Serial.print("MagZ: ");  
-  Serial.print(IMU.getMagZ_uT(),6);
-  
-  Serial.print("Temperature in C: ");
-  Serial.println(IMU.getTemperature_C(),6);
-  Serial.println();
-  delay(2);
+  // Output serial message
+  Serial.print(IMU.getAccelX_mss(),6); Serial.print(","); // Accelerometer x
+  Serial.print(IMU.getAccelY_mss(),6); Serial.print(","); // Accelerometer y
+  Serial.print(IMU.getAccelZ_mss(),6); Serial.print(","); // Accelerometer z
+  Serial.print(IMU.getGyroX_rads(),6); Serial.print(","); // Gyroscope x
+  Serial.print(IMU.getGyroY_rads(),6); Serial.print(","); // Gyroscope y
+  Serial.print(IMU.getGyroZ_rads(),6); Serial.print(","); // Gyroscope z
+  Serial.print(IMU.getMagX_uT(),6); Serial.print(",");// Magnetometer x
+  Serial.print(IMU.getMagY_uT(),6); Serial.print(",");// Magnetometer y
+  Serial.println(IMU.getMagZ_uT(),6);// Magnetometer z
+//  Serial.println(IMU.getTemperature_C(),6); // Temperature Celsius
+  delay(5);
 } 

@@ -28,12 +28,8 @@ class ArduinoInterface:
                 split_string = [float(item) for item in split_string]
                 return split_string
 
-    def read_serial(self):
-        serial_string = self.serial.readline()
-        return serial_string
-
-    def decode_imu_serial(self):
-        raw_string = self.read_serial()
+    def decode_serial(self):
+        raw_string = self.serial.readline()
         if raw_string:
             decoded_string = raw_string.strip().decode('utf-8')
             split_string = self.verify_decoded_string(decoded_string)
