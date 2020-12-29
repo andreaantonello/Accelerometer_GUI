@@ -122,7 +122,6 @@ class Widget(QWidget):
         split_string = self.serial_communication.decode_serial()
 
         if split_string and not self.pause:
-            start = time.time()
             acc = split_string[0:3]
             gyr = split_string[3:6]
             mag = split_string[6:9]
